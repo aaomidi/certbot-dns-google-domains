@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "certbot-dns-google-domains"
+version = "0.1.0"
+description = ""
+authors = ["Amir Omidi <amir@aaomidi.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+certbot = "1.23.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
