@@ -1,27 +1,29 @@
 from typing import Callable, Optional, List
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json, LetterCase
+from dataclasses import dataclass, field
+from dataclasses_json import dataclass_json, LetterCase, config
 import zope.interface
 import requests
 
 from certbot import errors, interfaces
 from certbot.plugins import dns_common
 
-
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class AcmeTxtRecord:
     fqdn: str
     digest: str
-    update_time: Optional[str] = None
+    update_time: Optional[str] = field(default=None, metadata=config(
+        exclude=lambda f: f is None))  # type: ignore
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class RotateChallengesRequest:
     access_token: str
-    records_to_add: Optional[List[AcmeTxtRecord]] = None
-    records_to_remove: Optional[List[AcmeTxtRecord]] = None
+    records_to_add: Optional[List[AcmeTxtRecord]] = field(default=None, metadata=config(
+        exclude=lambda f: f is None))  # type: ignore
+    records_to_remove: Optional[List[AcmeTxtRecord]] = field(default=None, metadata=config(
+        exclude=lambda f: f is None))  # type: ignore
     keep_expired_records: bool = False
 
 
@@ -32,16 +34,12 @@ class AcmeChallengeSet:
 
 
 class GDSApi:
-    TOKEN: str = "https://www.googleapis.com/oauth2/v4/token"
     ROTATE_CHALLENGES: str = "https://acmedns.googleapis.com/v1/acmeChallengeSets/{domain}:rotateChallenges"
     DEFAULT_TIMEOUT: int = 30  # 30 seconds timeout
     access_token: str
 
     def __init__(self, access_token: str):
         self.access_token = access_token
-
-    def get_access_token(self):
-
 
     def rotate_challenges(self, domain: str, validation_name: str, validation_token: str) -> Optional[AcmeChallengeSet]:
         record_add = AcmeTxtRecord(validation_name, validation_token)
