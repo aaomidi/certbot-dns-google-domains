@@ -32,25 +32,33 @@ class AcmeChallengeSet:
 
 
 class GDSApi:
+    TOKEN: str = "https://www.googleapis.com/oauth2/v4/token"
     ROTATE_CHALLENGES: str = "https://acmedns.googleapis.com/v1/acmeChallengeSets/{domain}:rotateChallenges"
     DEFAULT_TIMEOUT: int = 30  # 30 seconds timeout
-
-    access_token: Optional[str]
+    access_token: str
 
     def __init__(self, access_token: str):
         self.access_token = access_token
 
+    def get_access_token(self):
+
+
     def rotate_challenges(self, domain: str, validation_name: str, validation_token: str) -> Optional[AcmeChallengeSet]:
-        record_add = AcmeTxtRecord(validation_name + domain, validation_token)
+        record_add = AcmeTxtRecord(validation_name, validation_token)
         rotate_req = RotateChallengesRequest(
             self.access_token, [record_add], None, True)
+        request_json = rotate_req.to_json()
+        print(request_json)
+
         url = self.ROTATE_CHALLENGES.format(
             domain=domain)
         result = requests.post(
-            url, json=rotate_req.to_json(), timeout=self.DEFAULT_TIMEOUT)
-        print(url, result.text)
+            url, data=request_json, timeout=self.DEFAULT_TIMEOUT,
+            headers={"Content-Type": "application/json"})
+        print(result.text)
         if result.status_code != 200:
             return None
+
         return AcmeChallengeSet.from_json(result.text)
 
 
@@ -61,9 +69,10 @@ class Authenticator(dns_common.DNSAuthenticator):
     Google Domains DNS Authenticator handles the fullfillment of dns-01 challenges.
     """
 
+    access_token: str
+
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
-        self.access_token = None
 
     @classmethod
     def add_parser_arguments(cls, add: Callable[..., None], default_propagation_seconds: int = 30) -> None:
@@ -86,7 +95,6 @@ class Authenticator(dns_common.DNSAuthenticator):
         )
 
     def _perform(self, domain: str, validation_name: str, validation_token: str) -> None:
-        print(domain, validation_name, validation_token)
         gds_api = self._get_gds_api()
         result = gds_api.rotate_challenges(
             domain, validation_name, validation_token)
