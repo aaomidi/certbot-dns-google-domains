@@ -13,16 +13,16 @@ from certbot.plugins import dns_common
 class AcmeTxtRecord:
     fqdn: str
     digest: str
-    update_time: str
+    update_time: Optional[str] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class RotateChallengesRequest:
     access_token: str
-    records_to_add: List[AcmeTxtRecord]
-    records_to_remove: List[AcmeTxtRecord]
-    keep_expired_records: bool
+    records_to_add: Optional[List[AcmeTxtRecord]] = None
+    records_to_remove: Optional[List[AcmeTxtRecord]] = None
+    keep_expired_records: bool = False
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -32,7 +32,7 @@ class AcmeChallengeSet:
 
 
 class GDSApi:
-    ROTATE_CHALLENGES: str = "https://acmedns.googleapis.com/v1/{domain}:rotateChallenges"
+    ROTATE_CHALLENGES: str = "https://acmedns.googleapis.com/v1/acmeChallengeSets/{domain}:rotateChallenges"
     DEFAULT_TIMEOUT: int = 30  # 30 seconds timeout
 
     access_token: Optional[str]
@@ -44,11 +44,15 @@ class GDSApi:
         record_add = AcmeTxtRecord(validation_name + domain, validation_token)
         rotate_req = RotateChallengesRequest(
             self.access_token, [record_add], None, True)
-        result = requests.post(self.ROTATE_CHALLENGES.format(
-            domain=domain), json=rotate_req.to_json(), timeout=self.DEFAULT_TIMEOUT)
+        url = self.ROTATE_CHALLENGES.format(
+            domain=domain)
+        result = requests.post(
+            url, json=rotate_req.to_json(), timeout=self.DEFAULT_TIMEOUT)
+        print(url, result.text)
         if result.status_code != 200:
             return None
         return AcmeChallengeSet.from_json(result.text)
+
 
 @zope.interface.implementer(interfaces.IAuthenticator)
 @zope.interface.provider(interfaces.IPluginFactory)
@@ -62,7 +66,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         self.access_token = None
 
     @classmethod
-    def add_parser_arguments(cls, add: Callable[..., None], default_propagation_seconds: int = 10) -> None:
+    def add_parser_arguments(cls, add: Callable[..., None], default_propagation_seconds: int = 30) -> None:
         super(Authenticator, cls).add_parser_arguments(
             add, default_propagation_seconds)
         add('credentials', help='Google Domains credentials INI file.', default=None)
@@ -82,6 +86,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         )
 
     def _perform(self, domain: str, validation_name: str, validation_token: str) -> None:
+        print(domain, validation_name, validation_token)
         gds_api = self._get_gds_api()
         result = gds_api.rotate_challenges(
             domain, validation_name, validation_token)
@@ -91,4 +96,4 @@ class Authenticator(dns_common.DNSAuthenticator):
         return GDSApi(self.access_token)
 
     def _cleanup(self, domain, validation_name, validation):
-      return
+        return

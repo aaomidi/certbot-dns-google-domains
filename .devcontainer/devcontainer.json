@@ -5,7 +5,7 @@
 	"image": "mcr.microsoft.com/devcontainers/python:0-3.7",
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/poetry:1": {}
-	}
+  },
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -14,7 +14,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+  "postCreateCommand": "poetry config virtualenvs.in-project true",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
