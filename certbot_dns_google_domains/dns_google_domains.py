@@ -7,6 +7,7 @@ import requests
 from certbot import errors, interfaces
 from certbot.plugins import dns_common
 
+
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class AcmeTxtRecord:
@@ -50,9 +51,10 @@ class GDSApi:
 
         url = self.ROTATE_CHALLENGES.format(
             domain=domain)
+        print(url)
         result = requests.post(
             url, data=request_json, timeout=self.DEFAULT_TIMEOUT,
-            headers={"Content-Type": "application/json"})
+            headers={"Content-Type": "application/jso; charset=utf-8"})
         print(result.text)
         if result.status_code != 200:
             return None
