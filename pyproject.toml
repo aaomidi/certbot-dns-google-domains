@@ -4,12 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Amir Omidi <amir@aaomidi.com>"]
 license = "Apache 2.0"
-packages = [{include = "certbot_dns_google_domains/dns_google_domains.py"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10"
 certbot = ">=1.23.0"
 "zope.interface" = ">=5.5.0"
+dataclasses-json = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -19,4 +19,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.plugins."certbot.plugins"]
-"dns-google-domains" = "certbot_dns_google_domains:Authenticator"
+dns-google-domains = "certbot_dns_google_domains:Authenticator"
