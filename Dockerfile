@@ -4,12 +4,11 @@ WORKDIR /opt/certbot/plugin
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
-RUN ln -s ~/.poetry/bin/poetry /usr/bin/poetry
-RUN poetry config virtualenvs.create false
+RUN ~/.local/bin/poetry config virtualenvs.create false
 
 # Build plugin
 COPY [".", "."]
-RUN poetry build
+RUN ~/.local/bin/poetry build
 
 
 #################################

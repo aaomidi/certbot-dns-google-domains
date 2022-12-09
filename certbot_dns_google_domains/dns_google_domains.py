@@ -89,3 +89,6 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     def _get_gds_api(self) -> GDSApi:
         return GDSApi(self.access_token)
+
+    def _cleanup(self, domain, validation_name, validation):
+      return
