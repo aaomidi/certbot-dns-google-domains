@@ -6,13 +6,17 @@ authors = ["Amir Omidi <amir@aaomidi.com>"]
 license = "Apache 2.0"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.7.2"
 certbot = ">=1.23.0"
 "zope.interface" = ">=5.5.0"
 dataclasses-json = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.10"
+mypy = "^0.991"
 
 [build-system]
 requires = ["poetry-core"]
