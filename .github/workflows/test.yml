@@ -31,7 +31,7 @@ jobs:
         AGE_PASSPHRASE: ${{ secrets.AGE_PASSPHRASE }}
       run: |
         sudo mkdir /var/lib/letsencrypt/
-        sudo age -p "$AGE_PASSPHRASE" -d .github/google-domains-credentials.ini.age > /var/lib/letsencrypt/google-domains-credentials.ini
+        age -p "$AGE_PASSPHRASE" -d .github/google-domains-credentials.ini.age | sudo dd of=/var/lib/letsencrypt/google-domains-credentials.ini conv=notrunc
 
 
     - name: Test issuance
