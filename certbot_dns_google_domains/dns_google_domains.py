@@ -52,7 +52,7 @@ class GDSApi:
         url = self.ROTATE_CHALLENGES.format(domain=domain)
         result = requests.post(
             url, data=request_json, timeout=self.DEFAULT_TIMEOUT,
-            headers={"Content-Type": "application/jso; charset=utf-8"})
+            headers={"Content-Type": "application/json; charset=utf-8"})
         result.raise_for_status()
 
         return AcmeChallengeSet.from_json(result.text)
