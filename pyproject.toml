@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Amir Omidi <amir@aaomidi.com>"]
 license = "Apache 2.0"
+packages = [
+  { include = "certbot_dns_google_domains" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.7.2"

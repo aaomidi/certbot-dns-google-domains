@@ -17,3 +17,5 @@ FROM certbot/certbot
 
 COPY --from=build /opt/certbot/plugin/dist/*.whl /opt/certbot/src/plugin/
 RUN python tools/pip_install.py --no-cache-dir /opt/certbot/src/plugin/*.whl
+
+ENTRYPOINT ["/usr/bin/env"]
