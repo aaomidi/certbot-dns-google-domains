@@ -19,6 +19,6 @@ dns_google_domains_access_token = abcdef
 ### Docker
 
 ``` bash
-docker run -v '/var/lib/letsencrypt:/var/lib/letsencrypt' -v '/etc/letsencrypt:/etc/letsencrypt' --cap-drop=all {ghcr} certonly --authenticator 'dns-google-domains' --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' --agree-tos --email 'email@example.com' -d 'example.com'
+docker run -v '/var/lib/letsencrypt:/var/lib/letsencrypt' -v '/etc/letsencrypt:/etc/letsencrypt' --cap-drop=all ghcr.io/aaomidi/certbot-dns-google-domains:latest certbot certonly --authenticator 'dns-google-domains' --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' --agree-tos --email 'email@example.com' -d 'example.com'
 ```
 

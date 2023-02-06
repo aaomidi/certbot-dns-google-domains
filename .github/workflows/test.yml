@@ -1,0 +1,38 @@
+name: Build & Test
+
+on: [push]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: sudo apt-get install age
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Docker build
+      uses: docker/build-push-action@v4
+      with:
+        push: false
+        tags: test
+
+    - name: Decrypt credentials
+      env:
+        AGE_PASSPHRASE: ${{ secrets.AGE_PASSPHRASE }}
+      run: |
+        sudo mkdir /var/lib/letsencrypt/
+        sudo age -p "$AGE_PASSPHRASE" -d .github/google-domains-credentials.ini.age > /var/lib/letsencrypt/google-domains-credentials.ini
+
+
+    - name: Test issuance
+      run: docker run -v '/var/lib/letsencrypt:/var/lib/letsencrypt' -v '/etc/letsencrypt:/etc/letsencrypt' --cap-drop=all ghcr.io/aaomidi/certbot-dns-google-domains:latest certbot certonly --authenticator 'dns-google-domains' --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' --agree-tos --email 'googledomainsdnsplugin@google.com' -d 'somedomainfortesting1234.dev'
