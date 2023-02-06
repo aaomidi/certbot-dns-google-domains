@@ -6,9 +6,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-    - name: Install dependencies
-      run: sudo apt-get install age
-
     - name: Checkout
       uses: actions/checkout@v2
       with:
