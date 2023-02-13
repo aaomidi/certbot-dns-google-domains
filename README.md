@@ -1,5 +1,7 @@
 # certbot-dns-google-domains
 
+A Certbot DNS Authenticator for [Google Domains](https://domains.google/).
+
 ## Named Arguments
 
 Option|Description
@@ -29,8 +31,8 @@ docker run \
   certbot certonly \
   --authenticator 'dns-google-domains' \
   --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
-  --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' \
-  --agree-tos --email 'email@example.com' -d 'example.com'
+  --server 'https://acme-staging-v02.api.letsencrypt.org/directory' \
+  -d 'example.com'
 ```
 
 Notes:
@@ -38,3 +40,18 @@ Notes:
 - `-v '/etc/letsencrypt:/etc/letsencrypt'` is where certbot keeps its configuration.
 - `--authenticator 'dns-google-domains'` uses the dns-google-domains authenticator.
 - `--dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini'` is the path to the credentials file.
+
+
+### Python
+
+You can get the `certbot-dns-google-domains` package from [PyPi](https://pypi.org/project/certbot-dns-google-domains/):
+
+```bash
+pip3 install certbot certbot-dns-google-domains
+
+certbot certonly \
+--authenticator 'dns-google-domains' \
+--dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
+--server 'https://acme-staging-v02.api.letsencrypt.org/directory' \
+-d 'example.com'
+```
