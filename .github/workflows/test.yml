@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -23,6 +23,7 @@ jobs:
         load: true # Allow for using in docker run
         push: false
         tags: ghcr.io/aaomidi/certbot-dns-google-domains:latest
+        provenance: false
 
     - name: Decrypt credentials
       env:
