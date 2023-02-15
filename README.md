@@ -31,7 +31,7 @@ docker run \
   certbot certonly \
   --authenticator 'dns-google-domains' \
   --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
-  --server 'https://acme-staging-v02.api.letsencrypt.org/directory' \
+  --server 'https://acme-v02.api.letsencrypt.org/directory' \
   -d 'example.com'
 ```
 
@@ -52,6 +52,6 @@ pip3 install certbot certbot-dns-google-domains
 certbot certonly \
 --authenticator 'dns-google-domains' \
 --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
---server 'https://acme-staging-v02.api.letsencrypt.org/directory' \
+--server 'https://acme-v02.api.letsencrypt.org/directory' \
 -d 'example.com'
 ```
