@@ -72,6 +72,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         super(Authenticator, cls).add_parser_arguments(
             add, default_propagation_seconds)
         add('credentials', help='Google Domains credentials INI file.', default=None)
+        add('zone', help="The zone (base domain) under Google Domains. For example, example.com if requesting for a.example.com", default=None, required=False)
 
     def _validate_credentials(self, credentials: dns_common.CredentialsConfiguration) -> None:
         self.access_token = credentials.conf('access-token')
@@ -91,8 +92,11 @@ class Authenticator(dns_common.DNSAuthenticator):
         record_add = AcmeTxtRecord(validation_name, validation)
         rotate_req = RotateChallengesRequest(
             self.access_token, [record_add], None, True)
+        zone = self.conf('zone')
+        if zone is None:
+            zone = domain
         try:
-            gds_api.rotate_challenges(domain, rotate_req)
+            gds_api.rotate_challenges(zone, rotate_req)
         except Exception as err:
             raise errors.PluginError(f"Unable to rotate DNS challenges: {err}")
 

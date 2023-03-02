@@ -9,6 +9,7 @@ Option|Description
 `--authenticator dns-google-domains`|Select this authenticator plugin.
 `--dns-google-domains-credentials FILE`|Path to the INI file with credentials.
 `--dns-google-domains-propagation-seconds INT`|How long to wait for DNS changes to propagate. Default = 30s.
+`--dns-google-domains-zone STRING`|What the registered domain on Google domains is. This is required if you are requesting a certificate for a sub-domain. Default = None.
 
 ## Credentials
 
@@ -32,7 +33,8 @@ docker run \
   --authenticator 'dns-google-domains' \
   --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
   --server 'https://acme-v02.api.letsencrypt.org/directory' \
-  -d 'example.com'
+  --dns-google-domains-zone 'example.com' \
+  -d 'a.example.com'
 ```
 
 Notes:
@@ -40,6 +42,7 @@ Notes:
 - `-v '/etc/letsencrypt:/etc/letsencrypt'` is where certbot keeps its configuration.
 - `--authenticator 'dns-google-domains'` uses the dns-google-domains authenticator.
 - `--dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini'` is the path to the credentials file.
+- `--dns-google-domains-zone 'example.com'` is the main domain you have registered with Google domains. This is required if you're issuing certificates for a subdomain.
 
 
 ### Python
@@ -53,5 +56,6 @@ certbot certonly \
 --authenticator 'dns-google-domains' \
 --dns-google-domains-credentials '/var/lib/letsencrypt/dns_google_domains_credentials.ini' \
 --server 'https://acme-v02.api.letsencrypt.org/directory' \
--d 'example.com'
+--dns-google-domains-zone 'example.com' \
+-d 'a.example.com'
 ```

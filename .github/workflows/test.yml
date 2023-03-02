@@ -34,3 +34,6 @@ jobs:
 
     - name: Test issuance
       run: docker run -v '/var/lib/letsencrypt:/var/lib/letsencrypt' -v '/etc/letsencrypt:/etc/letsencrypt' --cap-drop=all ghcr.io/aaomidi/certbot-dns-google-domains:latest certbot certonly --authenticator 'dns-google-domains' --dns-google-domains-credentials '/var/lib/letsencrypt/google_domains_credentials.ini' --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' --agree-tos --email 'googledomainsdnsplugin@google.com' -d 'somedomainfortesting1234.dev'
+
+    - name: Test issuance 2.0
+      run: docker run -v '/var/lib/letsencrypt:/var/lib/letsencrypt' -v '/etc/letsencrypt:/etc/letsencrypt' --cap-drop=all ghcr.io/aaomidi/certbot-dns-google-domains:latest certbot certonly --authenticator 'dns-google-domains' --dns-google-domains-credentials '/var/lib/letsencrypt/google_domains_credentials.ini' --no-eff --non-interactive --server 'https://acme-staging-v02.api.letsencrypt.org/directory' --agree-tos --email 'googledomainsdnsplugin@google.com' --dns-google-domains-zone 'somedomainfortesting1234.dev' -d 'a.b.c.somedomainfortesting1234.dev'
