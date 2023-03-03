@@ -1,16 +1,46 @@
 name: Release
 
 on:
+  release:
+    types:
+      - "published"
   push:
     branches:
       - main
-    tags:
-      - "v*"
   pull_request:
     branches:
       - 'main'
 
 jobs:
+  pypi:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install and configure Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-in-project: true
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-ansi
+
+    - name: Build package
+      run: poetry build
+
+    - name: Publish package
+      if: github.event_name == 'release'
+      env:
+        PYPI_USERNAME: __token__
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      run: poetry publish --build -u "${PYPI_USERNAME}" -p "${PYPI_TOKEN}"
+
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -42,7 +72,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name == 'release' }}
           provenance: false
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
