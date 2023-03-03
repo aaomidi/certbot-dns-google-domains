@@ -39,7 +39,7 @@ jobs:
       env:
         PYPI_USERNAME: __token__
         PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      run: poetry publish --build -u "${PYPI_USERNAME}" -p "${PYPI_TOKEN}"
+      run: poetry publish --build --no-interaction --no-cache -u "${PYPI_USERNAME}" -p "${PYPI_TOKEN}"
 
   docker:
     runs-on: ubuntu-latest
