@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "certbot-dns-google-domains"
-version = "0.1.4"
+version = "0.1.5"
 description = "Certbot DNS authenticator for Google Domains"
 authors = ["Amir Omidi <amir@aaomidi.com>"]
 license = "Apache 2.0"
@@ -17,6 +17,7 @@ python = ">=3.7.2"
 certbot = ">=1.23.0"
 "zope.interface" = ">=5.5.0"
 dataclasses-json = "^0.5.7"
+publicsuffixlist = "^0.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -3,6 +3,28 @@ name: Build & Test
 on: [push]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+
+    - name: Install and configure Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-in-project: true
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-ansi
+
+    - name: Run pytest
+      run: poetry run pytest
+
   docker:
     runs-on: ubuntu-latest
     steps:
