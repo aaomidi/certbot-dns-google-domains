@@ -45,9 +45,6 @@ jobs:
     - name: Install dependencies
       run: poetry install --no-interaction --no-ansi
 
-    - name: Build package
-      run: poetry build
-
     - name: Publish package
       if: github.event_name == 'release'
       env:
