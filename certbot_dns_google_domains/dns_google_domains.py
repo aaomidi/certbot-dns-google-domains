@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
 from typing import Callable, Optional, List
 from dataclasses import dataclass, field
 import requests
@@ -22,6 +23,7 @@ from certbot import errors, interfaces
 from certbot.plugins import dns_common
 from publicsuffixlist import PublicSuffixList
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class AcmeTxtRecord(DataClassJsonMixin):
@@ -68,6 +70,11 @@ class GDSApi:
         result = requests.post(
             url, data=request_json, timeout=self.DEFAULT_TIMEOUT,
             headers={"Content-Type": "application/json; charset=utf-8"})
+
+        rotate_req.access_token = ""
+        sanitized_json = rotate_req.to_json()
+        logger.debug(
+            f"Request to {url} returned {result.status_code} {result.text} with data {sanitized_json}")
         result.raise_for_status()
 
         return AcmeChallengeSet.from_json(result.text)
@@ -115,7 +122,7 @@ class Authenticator(dns_common.DNSAuthenticator):
 
         zone = self._get_zone(
             domain, self.zone_from_credentials, self.conf('zone'), self.psl)
-        print(f"Zone selected for {domain}: {zone}")
+        logger.info(f"Zone selected for {domain}: {zone}")
         try:
             gds_api.rotate_challenges(zone, rotate_req)
         except Exception as err:
