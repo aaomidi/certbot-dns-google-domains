@@ -70,8 +70,11 @@ class GDSApi:
         result = requests.post(
             url, data=request_json, timeout=self.DEFAULT_TIMEOUT,
             headers={"Content-Type": "application/json; charset=utf-8"})
+
+        rotate_req.access_token = ""
+        sanitized_json = rotate_req.to_json()
         logger.debug(
-            f"Request to {url} returned {result.status_code} {result.text} with data {request_json}")
+            f"Request to {url} returned {result.status_code} {result.text} with data {sanitized_json}")
         result.raise_for_status()
 
         return AcmeChallengeSet.from_json(result.text)
