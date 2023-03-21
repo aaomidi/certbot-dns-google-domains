@@ -118,7 +118,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         gds_api = self._get_gds_api()
         record_add = AcmeTxtRecord(validation_name, validation)
         rotate_req = RotateChallengesRequest(
-            self.access_token, [record_add], None, True)
+            self.access_token, [record_add], None, False)
 
         zone = self._get_zone(
             domain, self.zone_from_credentials, self.conf('zone'), self.psl)
