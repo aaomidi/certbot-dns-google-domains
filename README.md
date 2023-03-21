@@ -70,6 +70,13 @@ certbot certonly \
 
 Note: If you have installed Certbot from a non-pip3 source, the certbot-dns-google-domains plugin might not be compatible with your existing Certbot installation. In this case, consider using pip3 to install Certbot and its plugins to ensure compatibility.
 
+### Homebrew
+
+```bash
+brew install certbot
+$(brew --prefix certbot)/libexec/bin/pip3 install certbot-dns-google-domains
+```
+
 ## Notes on Zone Resolution
 
 Google Domains does not provide an API to obtain the zone for a domain based on a subdomain. This plugin employs the following logic to determine the zone:
