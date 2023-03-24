@@ -52,7 +52,7 @@ class RotateChallengesRequest(DataClassJsonMixin):
 class AcmeChallengeSet(DataClassJsonMixin):
     dataclass_json_config = config(letter_case=LetterCase.CAMEL)[
         "dataclasses_json"]
-    record: List[AcmeTxtRecord]
+    record: Optional[List[AcmeTxtRecord]]
 
 
 class GDSApi:
