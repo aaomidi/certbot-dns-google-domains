@@ -21,7 +21,7 @@ import zope.interface
 
 from certbot import errors, interfaces
 from certbot.plugins import dns_common
-from publicsuffixlist import PublicSuffixList
+from publicsuffixlist  import PublicSuffixList
 
 logger = logging.getLogger(__name__)
 
