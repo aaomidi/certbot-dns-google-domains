@@ -132,17 +132,6 @@ class Authenticator(dns_common.DNSAuthenticator):
         return GDSApi(self.access_token)
 
     def _cleanup(self, domain: str, validation_name: str, validation: str):
-        gds_api = self._get_gds_api()
-        record_remove = AcmeTxtRecord(validation_name, validation)
-        rotate_req = RotateChallengesRequest(
-            self.access_token, None, [record_remove], True)
-
-        zone = self._get_zone(
-            domain, self.zone_from_credentials, self.conf('zone'), self.psl)
-        try:
-            gds_api.rotate_challenges(zone, rotate_req)
-        except Exception as err:
-            raise errors.PluginError(f"Unable to rotate DNS challenges: {err}")
         return
 
     @staticmethod
